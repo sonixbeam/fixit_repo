@@ -109,3 +109,26 @@ form button[type="submit"] {
     border-radius: 8px;
     cursor: pointer;
 }
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.btn-my-requests {
+    display: inline-block;
+    background-color: #2563eb;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.btn-my-requests:hover {
+    background-color: #1d4ed8;
+}

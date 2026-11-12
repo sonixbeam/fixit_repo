@@ -230,6 +230,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
 
             $pdo->commit();
+            header('Location: my-requests.php');
+            exit;
 
             // เปลี่ยน Token หลังส่งคำขอสำเร็จ
             $_SESSION['csrf_token'] = bin2hex(
@@ -280,7 +282,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </header>
 
 <main class="container">
-    <h1>แจ้งซ่อมใหม่</h1>
+    <div class="page-header">
+        <h1>แจ้งซ่อมใหม่</h1>
+
+        <a href="my-requests.php" class="btn-my-requests">
+            รายการแจ้งซ่อมของฉัน
+        </a>
+    </div>
+    
     <p class="subtitle">
         กรอกข้อมูลปัญหาที่ต้องการแจ้งซ่อม
     </p>
