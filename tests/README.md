@@ -2,6 +2,23 @@
 
 > ขอบเขตปัจจุบัน: เน้น Desktop เป็นหลัก ไม่ต้องทดสอบ Mobile/Responsive มือถือ และไม่ใช้ผล Mobile เป็นเงื่อนไขปิด Phase; เก็บบันทึกการตรวจมือถือในอดีตไว้เป็นประวัติเท่านั้น
 
+## Phase 6 Technician
+
+รัน `C:/xampp/php/php.exe tests/phase6.php` จาก project root: รวม regression Phase 4.3/5 แล้วทดสอบ Technician ต่อ รวม 189 checks ใน revision นี้ ใช้ฐาน fixit_test_<random> ใหม่ ไม่ copy ข้อมูลจริง ต้องมี PHP PDO MySQL, cURL, proc_open และสิทธิ์ CREATE DATABASE/TRIGGER ไม่ต้องมี GD/Pillow เพราะมี tiny JPEG/WEBP fixtures ใน tests/upload-fixtures.php
+
+Runner เปิด PHP server บน loopback สอง port สำหรับ concurrency และปิดใน finally; ใช้ sessions ใน tests/sessions ลบเฉพาะรูป/ไฟล์ temporary ที่สร้างเอง ฐานทดสอบเก็บไว้ ไม่ DROP อัตโนมัติ Reset ด้วยการรันใหม่ ไม่มี migration ใหม่สำหรับ Phase 6 ไม่ต้องแก้ config/database.php เพื่อใช้งานจริง
+
+ตรวจ Desktop ที่ `http://localhost/fixit/login.php`:
+
+1. Admin มอบหมาย PENDING ให้บัญชี TECHNICIAN ที่ active แล้ว login เป็นช่าง ตรวจ Dashboard/งานของฉัน/รายละเอียด ต้องไม่เห็นงานคนอื่น
+2. เริ่มงาน ตรวจ IN_PROGRESS และ Timeline; บันทึกความคืบหน้าต้องมีเวลา/ผู้ทำรายการ/ข้อความจริง
+3. ส่งรูป JPG/PNG/WEBP <=5 MB ต้องแสดงรอนักศึกษายืนยันและไม่มีฟอร์มแก้ไขงานอีก ช่างปิด COMPLETED เองไม่ได้
+4. Student เจ้าของดูรูปหลังซ่อมและยืนยัน แล้ว Technician/Admin ต้องเห็นเสร็จสิ้น
+5. ใช้ฐานทดสอบแยกสำหรับสิทธิ์ผิด/CSRF/ยกเลิก/reassign/ไฟล์ผิดหรือเกินขนาด/ส่งซ้ำ ตรวจ error และข้อมูลไม่เปลี่ยน ไม่ดัดแปลงคำร้องจริงเพื่อทดลอง
+6. ตรวจ search/status/Priority/category/Empty State/pagination เกิน 25 งาน และ Desktop layout ไม่ต้องทดสอบ Mobile
+
+ผล Browser Desktop ที่ Agent ตรวจแยกอยู่ใน PROGRESS.md ข้อความ Browser NOT RUN ใน stdout หมายถึง runner ไม่ได้ควบคุม Browser ไม่ใช่การปฏิเสธผลตรวจ UI ที่บันทึกแยกไว้; ยังเหลือ UI filters/pagination/error/ทุก Role ให้ครบก่อนปิด Phase 6
+
 รันจาก `C:\xampp\htdocs\fixit`:
 
 ```powershell

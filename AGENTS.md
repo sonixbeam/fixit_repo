@@ -4,7 +4,7 @@
 >
 > **การอ่านร่วมกัน:** `AGENTS.md` = ข้อกำหนดและกฎการพัฒนา, `PROGRESS.md` = สถานะ Phase ปัจจุบัน, Checklist, ผลทดสอบ และงานถัดไป
 >
-> **สถานะอ้างอิง ณ 13 พฤศจิกายน 2026:** Phase 4.3 และ Phase 5 ปิดเป็น DONE — VERIFIED โดยมีผล automated tests และผู้ใช้ยืนยัน Browser UI; Current Phase เป็น Phase 6 Technician (วางแผน ยังไม่เริ่มโค้ด) ตาม `PROGRESS.md` ไม่ต้องย้อนทำ Phase เดิมซ้ำ
+> **สถานะอ้างอิง ณ 13 พฤศจิกายน 2026:** Phase 4.3 และ Phase 5 ปิดเป็น DONE — VERIFIED โดยมีผล automated tests และผู้ใช้ยืนยัน Browser UI; Current Phase เป็น Phase 6 Technician (พัฒนาแล้ว — ดู verification ที่ค้างใน `PROGRESS.md`) ไม่ต้องย้อนทำ Phase เดิมซ้ำ
 
 ## 1. บทบาทและหลักการทำงานของ Agent
 

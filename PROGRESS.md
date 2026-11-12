@@ -9,9 +9,9 @@
 ## 1. สถานะล่าสุด (Current Checkpoint)
 
 - **Current Phase:** `6 — Technician`
-- **Current State:** `PLANNED — NOT STARTED (ร่างแผน ยังไม่เริ่มโค้ด)`
-- **Last Implemented Phase:** `5 — Admin: DONE — VERIFIED (13 พฤศจิกายน 2026)`
-- **Current Goal:** ทบทวนแผน/Checklist Phase 6 Technician ตามหัวข้อ 9; รอบนี้จัดทำเอกสารเท่านั้น
+- **Current State:** `IMPLEMENTED — NEEDS VERIFICATION (รอ Desktop UI กรณี error/filters/pagination เพิ่มเติม)`
+- **Last Implemented Phase:** `6 — Technician (implemented); Phase 5 DONE — VERIFIED`
+- **Current Goal:** ปิด Desktop UI verification กรณีที่เหลือของ Phase 6 ตามหัวข้อ 9; ยังไม่เริ่ม Phase 7
 - **Important:** ผู้ใช้ยืนยัน Browser UI Phase 5 ผ่านครบแล้ว; ปิด Phase 5 โดยแยกผล UAT ผู้ใช้จากผล Agent รันจริง; เน้น Desktop ไม่ต้องทดสอบ Mobile; Technician integration เป็นงาน Phase 6
 - **Verification:** ตรวจโค้ดและ SHOW CREATE TABLE จากฐานข้อมูลจริง `fixit` แล้วเมื่อ 13 พฤศจิกายน 2026; ดู Change Log ด้านล่างสำหรับผลทดสอบล่าสุด
 
@@ -34,7 +34,7 @@
 | 4.2 | Student ดู/ค้นหา/กรอง, รายละเอียด, ยกเลิก `PENDING` | พัฒนาแล้ว | ทดสอบ Ownership/Cancel/History ซ้ำ |
 | **4.3** | **Progress Timeline + Completion Evidence + Student Confirmation** | **DONE — VERIFIED (13 พ.ย. 2026)** | **Automated 35 checks + ผู้ใช้ยืนยัน UI/รูปอัปโหลด; Technician integration pending** |
 | **5** | Admin: Dashboard, กำหนด Priority, มอบหมายช่าง, ห้องพัก | **DONE — VERIFIED (13 พ.ย. 2026)** | **ชุดทดสอบ 109 checks + ผู้ใช้ยืนยัน Browser UI ครบ** |
-| **6** | Technician: งานที่ได้รับมอบหมาย, เริ่มงาน, รูปหลังซ่อม, ส่งยืนยัน | **PLANNED — NOT STARTED** | **Current Phase; Checklist หัวข้อ 9; ยังไม่เริ่ม implementation** |
+| **6** | Technician: งานที่ได้รับมอบหมาย, เริ่มงาน, รูปหลังซ่อม, ส่งยืนยัน | **IMPLEMENTED — NEEDS VERIFICATION** | **189 automated checks + Desktop flow หลักผ่าน; รอตรวจ UI เพิ่มเติม** |
 | 7 | Reports และ Integration/System Testing | NOT STARTED | ทดสอบ Workflow ทุก Role |
 | 8 | Desktop UI/UX Refinement | NOT STARTED | ปรับ UI ภายหลัง; Mobile ไม่เป็นเกณฑ์ทดสอบ |
 
@@ -297,7 +297,7 @@
 - ขอบเขตใหม่: Desktop เป็นหลัก ไม่ต้องทดสอบ Mobile/Responsive มือถือ ไม่ต้องรื้อ CSS Responsive เดิม
 - รอบนี้แก้เอกสาร AGENTS.md, PROGRESS.md, tests/README.md เท่านั้น; ยังไม่เขียนโค้ด Phase 6
 
-## 9. Current Phase 6 — Technician (ร่างแผน)
+## 9. Current Phase 6 — Technician (IMPLEMENTED — NEEDS VERIFICATION)
 
 ### เป้าหมายและ Dependencies
 
@@ -305,7 +305,7 @@
 
 | ส่วนที่มีอยู่ | สิ่งที่ Phase 6 ต้องใช้/รักษา |
 |---|---|
-| technician/dashboard.php | ปัจจุบันเป็น placeholder เปลี่ยนเป็นข้อมูลเฉพาะงานของช่างที่ login |
+| technician/dashboard.php | แทน placeholder ด้วยข้อมูลเฉพาะงานของช่างที่ login แล้ว |
 | repair_assignment | อ่านเฉพาะ is_active=1 ของช่างปัจจุบัน; recheck ใต้ lock ทุก POST ป้องกันหน้าเก่าหลังเปลี่ยนช่าง |
 | repair_request | เริ่มได้เฉพาะ PENDING → IN_PROGRESS; ช่างไม่เปลี่ยน Priority/เจ้าของ/สถานที่ และไม่ตั้ง COMPLETED |
 | repair_history | เริ่มงานบันทึก PENDING → IN_PROGRESS; progress/ส่งหลักฐานบันทึก IN_PROGRESS → IN_PROGRESS พร้อมผู้ทำรายการ/หมายเหตุจริง |
@@ -327,22 +327,26 @@
 
 ### Checklist และลำดับพัฒนา
 
-- [ ] 6.0 Inspect โค้ด/schema จริง/SQL baseline/migration และทบทวน contract assignment/completion; ไม่เพิ่ม schema หากตารางเดิมรองรับ
-- [ ] 6.1 Dashboard และรายการงานเฉพาะช่าง ค้นหา/กรองสถานะ/Priority/หมวดหมู่ แบ่งหน้าและ Empty State ตามจำเป็น
-- [ ] 6.1 รายละเอียดงาน/รูปปัญหา/Timeline/ข้อมูลมอบหมาย พร้อม server-side Role/Ownership ทั้ง GET และ POST
-- [ ] 6.2 เริ่มงาน PENDING → IN_PROGRESS และ history แบบ atomic; กันเริ่มซ้ำ/งานคนอื่น/งานยกเลิก/assignment หมดสิทธิ์
-- [ ] 6.2 บันทึก progress note เฉพาะ IN_PROGRESS ที่ยังไม่ส่ง completion พร้อม CSRF/validation/escape output
-- [ ] 6.3 Upload หลักฐานบังคับ ตรวจ MIME+extension+ขนาด+image signature+is_uploaded_file และ path ปลอดภัย ใช้ storage เดิม
-- [ ] 6.3 บันทึก completion + history ส่งงานแบบ transaction โดยไม่ปิดงานและไม่เติมข้อมูลยืนยันแทน Student
-- [ ] 6.3 กัน double submit/ส่งพร้อมกัน/หลักฐานซ้ำ และ cleanup ไฟล์ใหม่เมื่อ validation/transaction ล้มเหลว
-- [ ] 6.4 ทดสอบ unauthorized roles/ช่างอื่น/ช่างเดิมหลัง reassign/CSRF และ input ผิด พร้อมตรวจข้อมูลไม่เปลี่ยน
-- [ ] 6.4 ทดสอบเริ่มซ้ำ/หมายเหตุ/อัปโหลดถูก-ผิด-ไม่มีรูป-เกินขนาด/state ไม่ถูกต้อง/terminal state พร้อม audit
-- [ ] 6.4 ทดสอบ rollback และ race: start vs cancel/reassign, submit พร้อมกัน, submit vs note; active assignment/completion/history ต้องสอดคล้อง
-- [ ] 6.4 Regression Phase 4–5 และ workflow ผ่าน HTTP จริง: Student สร้าง → Admin มอบหมาย → Technician เริ่ม/บันทึก/ส่งรูป → Student ดูรูปและยืนยัน → ทุก Role เห็น COMPLETED
+- [x] 6.0 Inspect โค้ด/schema จริง/SQL baseline/migration และทบทวน contract assignment/completion; ไม่เพิ่ม schema หากตารางเดิมรองรับ
+- [x] 6.1 Dashboard และรายการงานเฉพาะช่าง ค้นหา/กรองสถานะ/Priority/หมวดหมู่ แบ่งหน้าและ Empty State ตามจำเป็น
+- [x] 6.1 รายละเอียดงาน/รูปปัญหา/Timeline/ข้อมูลมอบหมาย พร้อม server-side Role/Ownership ทั้ง GET และ POST
+- [x] 6.2 เริ่มงาน PENDING → IN_PROGRESS และ history แบบ atomic; กันเริ่มซ้ำ/งานคนอื่น/งานยกเลิก/assignment หมดสิทธิ์
+- [x] 6.2 บันทึก progress note เฉพาะ IN_PROGRESS ที่ยังไม่ส่ง completion พร้อม CSRF/validation/escape output
+- [x] 6.3 Upload หลักฐานบังคับ ตรวจ MIME+extension+ขนาด+image signature+is_uploaded_file และ path ปลอดภัย ใช้ storage เดิม
+- [x] 6.3 บันทึก completion + history ส่งงานแบบ transaction โดยไม่ปิดงานและไม่เติมข้อมูลยืนยันแทน Student
+- [x] 6.3 กัน double submit/ส่งพร้อมกัน/หลักฐานซ้ำ และ cleanup ไฟล์ใหม่เมื่อ validation/transaction ล้มเหลว
+- [x] 6.4 ทดสอบ unauthorized roles/ช่างอื่น/ช่างเดิมหลัง reassign/CSRF และ input ผิด พร้อมตรวจข้อมูลไม่เปลี่ยน
+- [x] 6.4 ทดสอบเริ่มซ้ำ/หมายเหตุ/อัปโหลดถูก-ผิด-ไม่มีรูป-เกินขนาด/state ไม่ถูกต้อง/terminal state พร้อม audit
+- [x] 6.4 ทดสอบ rollback และ race: start vs cancel/reassign, submit พร้อมกัน, submit vs note; active assignment/completion/history ต้องสอดคล้อง
+- [x] 6.4 Regression Phase 4–5 และ workflow ผ่าน HTTP จริง: Student สร้าง → Admin มอบหมาย → Technician เริ่ม/บันทึก/ส่งรูป → Student ดูรูปและยืนยัน → ทุก Role เห็น COMPLETED
 - [ ] 6.4 ตรวจ Browser UI บน Desktop: navigation/list/detail/forms/รูป/Timeline/error-success/ปุ่มตามสิทธิ์; ไม่ทดสอบ Mobile
-- [ ] อัปเดต PROGRESS.md พร้อม PASS/FAIL/NOT RUN และไฟล์/migration/ข้อจำกัดจริง ก่อนปิด Phase 6; Phase 7 ทำรายงานและ Integration เพิ่มเติม
+- [x] อัปเดต PROGRESS.md พร้อม PASS/FAIL/NOT RUN และไฟล์/migration/ข้อจำกัดจริง ก่อนปิด Phase 6; Phase 7 ทำรายงานและ Integration เพิ่มเติม
 
-### ไฟล์ที่คาดว่าจะสร้างหรือแก้ (ยังไม่ได้ดำเนินการ)
+- [x] Desktop Chrome flow หลัก: Dashboard/list/detail/start/progress/upload/success/รอยืนยันอ่านอย่างเดียว/Timeline
+- [ ] Desktop UI filters/pagination หลายหน้า และกรณี error/สิทธิ์ปฏิเสธให้ครบ (HTTP ผ่านแล้ว); ไม่ทดสอบ Mobile
+- [ ] ปิด Phase 6 หลัง verification ที่เหลือผ่าน; ยังไม่เริ่ม Phase 7
+
+### ไฟล์ Phase 6 และแผนที่ใช้
 
 | ไฟล์ | แผน |
 |---|---|
@@ -361,3 +365,28 @@
 ### เกณฑ์ปิด Phase 6
 
 Checklist งานที่จำเป็นต้องผ่านจริงบน Desktop; มีหลักฐานว่า Technician ไม่เห็น/แก้งานของผู้อื่น ไม่ปิดงานข้าม Student และส่งหลักฐานแล้ว Student ยืนยันได้แบบ atomic พร้อม regression Admin/Student ผ่าน หากยังมีส่วนสำคัญ NOT RUN ให้ระบุ IMPLEMENTED — NEEDS VERIFICATION ห้ามอ้าง DONE — VERIFIED; Mobile ไม่อยู่ในเกณฑ์นี้
+
+### 2026-11-13 — Phase 6 implementation และ verification
+
+- สถานะ: IMPLEMENTED — NEEDS VERIFICATION; ยังไม่เริ่ม Phase 7
+- Audit: ตรวจ schema จริง request/assignment/history/completion, auth, Admin transaction, Student confirmation และ .htaccess; ใช้ INT UNSIGNED/InnoDB และสี่สถานะเดิม
+- ไฟล์เพิ่ม: technician/my-jobs.php (ownership/search/filters/pagination/empty state), technician/job-detail.php (รายละเอียด/assignment/รูป/Timeline/POST actions), includes/repair-technician.php (CSRF/ownership/upload/transaction), includes/technician-header.php (navigation/guard)
+- ไฟล์แก้: technician/dashboard.php แทน placeholder ด้วยจำนวนงานเฉพาะช่าง; reuse CSS/components เดิมและ ID/text/status/Priority helpers จาก repair-admin.php โดยไม่เรียก Admin mutations ในหน้า Technician ไม่สร้าง e()/auth ซ้ำ
+- Security: requireRole ทุกหน้าและ owner GET/POST; transaction ล็อก request ก่อน ตรวจ active user และ active assignment เพียงหนึ่งแถวตรงผู้ทำรายการซ้ำ; CSRF + single-use action token ต่อคำร้องกัน replay progress form, PRG หลังสำเร็จ
+- Workflow: start PENDING → IN_PROGRESS; progress เพิ่ม history; submit บังคับรูป เพิ่ม completion+history คง IN_PROGRESS ไม่แตะ completed_at/confirmed fields; หลังส่ง/terminal state เป็น read-only
+- Upload: is_uploaded_file/error/MIME/extension/getimagesize/ขนาดจริง <=5 MB; ชื่อสุ่ม 32 hex ใน uploads/completions; rollback ลบเฉพาะรูปใหม่ในคำขอนั้น ไม่ลบหลักฐานเก่า; PHP CLI upload/post limit ปัจจุบัน 40M
+- Database Changes: ไม่มี DDL/migration ใหม่ ไม่เปลี่ยน ENUM/PK ไม่ seed หรือแก้ข้อมูลจริง fixit
+- Tests เพิ่ม: tests/phase6.php, tests/technician-worker.php, tests/upload-fixtures.php; router เพิ่ม Technician routes/ภาพสำหรับ preview; .gitignore เพิ่ม phase6-last-run.log
+- PASS: tests/phase6.php ล่าสุด 189 checks (regression เดิม 109 + Technician 80) ใน fixit_test_c68547590cb8
+- PASS: Role/ownership/stale assignment/CSRF/form replay/state/note validation/XSS/ห้ามช่างปิดงานเอง; history บันทึกผู้ทำรายการถูกต้อง
+- PASS: multipart PNG/JPEG/WEBP ผ่าน HTTP จริง; ไม่มีรูป/ไฟล์ปลอม/script extension/MIME ไม่ตรง/เกินขนาด ถูกปฏิเสธโดย DB/ไฟล์ไม่เปลี่ยน
+- PASS: trigger-induced rollback ของ start/progress/submit; submit rollback ลบรูปใหม่ ไม่มีข้อมูลค้างครึ่งทาง
+- PASS: start/start, start/cancel, start/reassign ผ่านสอง processes; submit/submit และ submit/progress ผ่านสอง HTTP servers และสอง sessions แข่ง request lock ได้ completion/รูป/history ส่งงานเพียงหนึ่งครั้ง
+- PASS: pagination 30 งานแบ่ง 25+5 คงตัวกรอง, empty state และ malformed input ไม่ crash
+- PASS: workflow ทุก Role ผ่าน endpoints จริง Student สร้าง → Admin มอบหมาย → Technician เริ่ม/บันทึก/อัปโหลด → Student ดูรูปและยืนยัน; ทุก Role อ่าน COMPLETED มี history หกเหตุการณ์
+- FAIL ระหว่างพัฒนาที่แก้แล้ว: test assertion คาด query encoding %20 แต่ http_build_query ใช้ + ถูกต้อง; แก้ assertion และรันใหม่ผ่าน ไม่ใช่บั๊กตัวกรอง
+- Desktop Chrome PASS: desktop_tech/งาน #33 ในฐานแยก fixit_test_0e0e0bb1783f แสดง Dashboard/list/detail, กด start/progress/เลือกไฟล์/upload ผ่านจริง มี success และสถานะรอยืนยัน พร้อม Timeline และ read-only หลังส่ง
+- NOT RUN: Desktop Browser filters/pagination/error/unauthorized states ให้ครบ และทุก Role ผ่าน UI ทั้งชุด; HTTP กรณีเหล่านี้ผ่านแล้ว; ไม่ต้องทดสอบ Mobile
+- Preview server loopback ปิดแล้ว; รูป fixture/รูป upload ของ preview ลบเฉพาะที่สร้างเอง ฐานทดสอบคงอยู่เพื่อดู audit แต่รูปชั่วคราวไม่คงอยู่
+- ข้อจำกัด: ภาพยังเป็น static URL; ไม่มี Reject/Reopen/แก้หลักฐานหลังส่ง; assignment หลาย active แถวถูกปฏิเสธไม่แก้ข้อมูลจริงอัตโนมัติ
+- งานถัดไป: ตรวจ Desktop UI รายการ NOT RUN แล้วบันทึกหลักฐานก่อนปิด Phase 6
