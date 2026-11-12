@@ -2,6 +2,8 @@
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../includes/auth.php';
 
+require_once __DIR__ . '/../includes/repair-completion.php';
+
 $user = requireRole('STUDENT');
 $userId = (int) $user['user_id'];
 
@@ -24,9 +26,39 @@ if (empty($_SESSION['csrf_cancel'])) {
 }
 
 $error = '';
+// ตรวจเจ้าของก่อนทำ action และอ่านข้อมูลประกอบ
+$owner = $pdo->prepare('SELECT request_id FROM repair_request WHERE request_id = ? AND user_id = ?');
+$owner->execute([$requestId, $userId]);
+if (!$owner->fetchColumn()) {
+    http_response_code(404);
+    exit('ไม่พบคำขอแจ้งซ่อม');
+}
+if (empty($_SESSION['csrf_confirm'])) {
+    $_SESSION['csrf_confirm'] = bin2hex(random_bytes(32));
+}
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !in_array($_POST['action'] ?? 'cancel', ['cancel', 'confirm'], true)) {
+    http_response_code(400);
+    exit('การทำรายการไม่ถูกต้อง');
+}
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'confirm') {
+    $token = $_POST['csrf_token'] ?? '';
+    if (!is_string($token) || !hash_equals($_SESSION['csrf_confirm'], $token)) {
+        http_response_code(403);
+        exit('CSRF Token ไม่ถูกต้อง');
+    }
+    try {
+        confirmRepair($pdo, $requestId, $userId);
+        header('Location: request-detail.php?id=' . $requestId . '&confirmed=1');
+        exit;
+    } catch (Throwable $ex) {
+        http_response_code(409);
+        $error = 'ไม่สามารถยืนยันงานได้ กรุณาตรวจสอบสถานะและหลักฐานอีกครั้ง';
+    }
+}
+
 
 // ยกเลิกคำขอ
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? 'cancel') === 'cancel') {
 
     $token = $_POST['csrf_token'] ?? '';
 
@@ -137,6 +169,30 @@ if (!$request) {
     http_response_code(404);
     exit('ไม่พบคำขอแจ้งซ่อม');
 }
+
+$historyStmt = $pdo->prepare('SELECT h.*, u.username AS actor_name FROM repair_history h
+    JOIN `user` u ON u.user_id = h.changed_by_user_id
+    WHERE h.request_id = ? ORDER BY h.changed_at ASC, h.history_id ASC');
+$historyStmt->execute([$requestId]);
+$histories = $historyStmt->fetchAll();
+$assignmentStmt = $pdo->prepare('SELECT a.*, u.username AS technician_name FROM repair_assignment a
+    JOIN `user` u ON u.user_id = a.technician_user_id
+    WHERE a.request_id = ? AND a.is_active = 1 ORDER BY a.assigned_at DESC, a.assignment_id DESC');
+$assignmentStmt->execute([$requestId]);
+$assignments = $assignmentStmt->fetchAll();
+// หากยังไม่ได้ติดตั้ง migration หน้ารายละเอียดและการยกเลิกยังใช้ได้
+$completion = null;
+$completionAvailable = true;
+try {
+    $completion = repairCompletion($pdo, $requestId);
+} catch (PDOException $ex) {
+    if (($ex->errorInfo[1] ?? null) !== 1146) {
+        throw $ex;
+    }
+    $completionAvailable = false;
+}
+$completionUrl = $completion ? completionPhotoUrl($completion['completion_photo_path']) : null;
+$canConfirm = canConfirmRepair($request, $completion);
 
 $statusLabels = [
     'PENDING' => 'รอดำเนินการ',
@@ -312,6 +368,8 @@ if (
                 grid-template-columns: 1fr;
             }
         }
+        .timeline li { margin-bottom: 24px; padding-left: 8px; }
+        .btn-confirm { background: #166534; color: white; padding: 12px 20px; border: 0; border-radius: 8px; cursor: pointer; }
     </style>
 </head>
 
@@ -408,6 +466,53 @@ if (
             >
 
         <?php endif; ?>
+
+        <section class="cancel-section" aria-labelledby="progress-heading">
+            <h2 id="progress-heading">ความคืบหน้าการซ่อม</h2>
+            <p class="subtitle"><?= e($canConfirm ? 'รอนักศึกษายืนยัน' : ($statusLabels[$status] ?? $status)) ?></p>
+            <h3>ช่างที่ได้รับมอบหมาย</h3>
+            <?php if (!$assignments): ?><p class="subtitle">ยังไม่มีช่างที่ได้รับมอบหมาย</p><?php endif; ?>
+            <?php foreach ($assignments as $assignment): ?>
+                <p><?= e($assignment['technician_name']) ?> — <?= e($assignment['assigned_at']) ?></p>
+                <?php if ($assignment['note']): ?><div class="description"><?= e($assignment['note']) ?></div><?php endif; ?>
+            <?php endforeach; ?>
+            <h3>ประวัติเหตุการณ์ (เก่าไปใหม่)</h3>
+            <?php if (!$histories): ?><p class="subtitle">ยังไม่มีประวัติเหตุการณ์</p><?php endif; ?>
+            <ol class="timeline">
+                <?php foreach ($histories as $history): ?>
+                    <li>
+                        <time><?= e($history['changed_at']) ?></time> — <?= e($history['actor_name']) ?>
+                        <p><?= e($history['old_status'] === null ? 'สร้างคำร้อง' : ($statusLabels[$history['old_status']] ?? $history['old_status'])) ?>
+                            → <?= e($statusLabels[$history['new_status']] ?? $history['new_status']) ?></p>
+                        <?php if ($history['note']): ?><div class="description"><?= e($history['note']) ?></div><?php endif; ?>
+                    </li>
+                <?php endforeach; ?>
+            </ol>
+        </section>
+        <section class="cancel-section" aria-labelledby="completion-heading">
+            <h2 id="completion-heading">หลักฐานหลังซ่อม</h2>
+            <?php if (!$completionAvailable): ?>
+                <p class="subtitle">ระบบหลักฐานหลังซ่อมยังไม่พร้อมใช้งาน</p>
+            <?php elseif (!$completion): ?>
+                <p class="subtitle">ช่างยังไม่ได้ส่งหลักฐานหลังซ่อม จึงยังยืนยันงานไม่ได้</p>
+            <?php else: ?>
+                <p>ส่งโดย <?= e($completion['submitted_by_name']) ?> เมื่อ <?= e($completion['submitted_at']) ?></p>
+                <?php if ($completion['note']): ?><div class="description"><?= e($completion['note']) ?></div><?php endif; ?>
+                <?php if ($completionUrl): ?>
+                    <a href="<?= e($completionUrl) ?>" target="_blank" rel="noopener"><img class="image" src="<?= e($completionUrl) ?>" alt="หลักฐานหลังซ่อมจากช่าง"></a>
+                <?php else: ?><p class="subtitle">ไม่พบรูปหลักฐานที่ถูกต้อง จึงยังยืนยันงานไม่ได้</p><?php endif; ?>
+                <?php if ($completion['confirmed_at']): ?>
+                    <p class="alert success">ยืนยันงานซ่อมแล้ว เมื่อ <?= e($completion['confirmed_at']) ?></p>
+                <?php elseif ($canConfirm): ?>
+                    <p>รอนักศึกษายืนยัน กรุณาตรวจสอบรูปหลักฐานก่อนยืนยันงานซ่อม</p>
+                    <form method="POST" onsubmit="return confirm('ยืนยันว่าได้รับการซ่อมเรียบร้อยแล้ว?');">
+                        <input type="hidden" name="action" value="confirm">
+                        <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_confirm']) ?>">
+                        <button class="btn-confirm" type="submit">ยืนยันงานซ่อม</button>
+                    </form>
+                <?php else: ?><p class="subtitle">คำร้องนี้ยังไม่อยู่ในเงื่อนไขที่ยืนยันงานได้</p><?php endif; ?>
+            <?php endif; ?>
+        </section>
 
         <!-- ยกเลิกได้เฉพาะ PENDING -->
         <?php if ($status === 'PENDING'): ?>

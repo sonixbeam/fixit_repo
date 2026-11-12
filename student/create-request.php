@@ -230,18 +230,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
 
             $pdo->commit();
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
             header('Location: my-requests.php');
-            exit;
-
-            // เปลี่ยน Token หลังส่งคำขอสำเร็จ
-            $_SESSION['csrf_token'] = bin2hex(
-                random_bytes(32)
-            );
-
-            header(
-                'Location: create-request.php?success='
-                . $requestId
-            );
             exit;
 
         } catch (Throwable $e) {
