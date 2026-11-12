@@ -1,6 +1,20 @@
 # ทดสอบ Phase 4.3
 
 > ขอบเขตปัจจุบัน: เน้น Desktop เป็นหลัก ไม่ต้องทดสอบ Mobile/Responsive มือถือ และไม่ใช้ผล Mobile เป็นเงื่อนไขปิด Phase; เก็บบันทึกการตรวจมือถือในอดีตไว้เป็นประวัติเท่านั้น
+>
+> ตั้งแต่ Phase 7 ผู้ใช้เป็นผู้ตรวจ UI เอง Agent เตรียม Checklist/ยอดคาดหวังและทดสอบ backend/HTTP/DB ตามปกติ ไม่เปิดหรือควบคุม Browser อัตโนมัติ เว้นแต่ผู้ใช้ร้องขอภายหลัง ผล UI ต้องระบุว่าผู้ใช้ยืนยัน แยกจาก automated PASS
+>
+> Phase 7 ปิดเป็น DONE — VERIFIED เมื่อ 13 พฤศจิกายน 2026 ด้วย automated 247 checks ที่รันก่อนหน้าและผู้ใช้ยืนยัน “UI Phase 7 ผ่านแล้ว” Current Phase เป็น 8 Desktop UI/UX Refinement (ยังไม่เริ่ม รอวางแผน)
+
+## Phase 7 Reports & Integration
+
+รัน `C:/xampp/php/php.exe tests/phase7.php` จาก project root เพื่อรัน regression ทุก Phase เดิมก่อน แล้วตรวจ aggregate/เวลาไทย/date boundaries/attribution/data anomalies/read-only/role/HTTP filters ของ Reports รอบล่าสุดผ่าน 247 checks จำนวน checks บางเส้นทาง race อาจต่างเล็กน้อยตามผู้ชนะ ให้ยึด PASS/FAIL จริง
+
+Runner ใช้ฐาน fixit_test_<random> แยกและเก็บฐานไว้เหมือนเดิม ไม่ copy ข้อมูลจริง ไม่ DROP อัตโนมัติ รันใหม่คือ reset ไปฐานใหม่ ต้องมี PHP PDO MySQL/cURL/proc_open และสิทธิ์สร้างฐาน/TRIGGER เช่น Phase 6 ไม่มี migration ใหม่ และไม่ต้องแก้ config/database.php ของแอปจริง
+
+รายงานเปิดจาก Admin → รายงาน หรือ `http://localhost/fixit/admin/reports.php` ใช้วันที่แจ้งเวลาไทยแบบรวมวันสิ้นสุด ทุก summary/รายการอ่านใน read-only snapshot เดียว; กรองช่างจาก current assignment หรือผู้ส่ง completion จริง และแยกตัวเลขสองบทบาทในตาราง ไม่ตีความจำนวน assignment history เป็นจำนวนคำร้อง
+
+UI เป็นหน้าที่ผู้ใช้: ดู [Checklist และยอด fixture อ้างอิง](phase7-ui-checklist.md) ตัวเลข fixture ไม่ใช่ยอดฐานจริง ไม่ต้องทดสอบ Mobile ผู้ใช้รับรอง UI แล้วจึงปิด Phase 7 เป็น DONE — VERIFIED; การอัปเดตรับรองครั้งนี้แก้เฉพาะเอกสาร ไม่ได้รันทดสอบอัตโนมัติซ้ำ
 
 ## Phase 6 Technician
 

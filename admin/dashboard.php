@@ -15,6 +15,7 @@ $categories = $pdo->query('SELECT c.category_name,COUNT(r.request_id) AS total F
 require __DIR__ . '/../includes/admin-header.php';
 ?>
 <p class="subtitle">สวัสดี <?= e($user['username']) ?> — สรุปจากคำร้องทั้งหมดในระบบ</p>
+<p><a href="reports.php">ดูรายงานตามช่วงวันที่ หมวดหมู่ และช่าง</a></p>
 <div class="cards">
     <?php foreach ($statusLabels as $key=>$label): ?><a class="card" href="requests.php?status=<?= e($key) ?>"><h2><?= e($label) ?></h2><strong><?= (int)($statuses[$key] ?? 0) ?></strong> คำร้อง</a><?php endforeach; ?>
     <a class="card" href="requests.php?status=PENDING&amp;technician=unassigned"><h2>รอมอบหมายช่าง</h2><strong><?= $unassigned ?></strong> คำร้อง</a>

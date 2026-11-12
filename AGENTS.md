@@ -4,7 +4,7 @@
 >
 > **การอ่านร่วมกัน:** `AGENTS.md` = ข้อกำหนดและกฎการพัฒนา, `PROGRESS.md` = สถานะ Phase ปัจจุบัน, Checklist, ผลทดสอบ และงานถัดไป
 >
-> **สถานะอ้างอิง ณ 13 พฤศจิกายน 2026:** Phase 4.3 และ Phase 5 ปิดเป็น DONE — VERIFIED โดยมีผล automated tests และผู้ใช้ยืนยัน Browser UI; Current Phase เป็น Phase 6 Technician (พัฒนาแล้ว — ดู verification ที่ค้างใน `PROGRESS.md`) ไม่ต้องย้อนทำ Phase เดิมซ้ำ
+> **สถานะอ้างอิง ณ 13 พฤศจิกายน 2026:** Phase 4.3–7 ปิดเป็น DONE — VERIFIED โดยมีผล automated tests และผู้ใช้ยืนยัน Browser UI; Current Phase เป็น Phase 8 Desktop UI/UX Refinement (ยังไม่เริ่ม รอวางแผน) ตาม `PROGRESS.md` ไม่ต้องย้อนทำ Phase เดิมซ้ำ
 
 ## 1. บทบาทและหลักการทำงานของ Agent
 
@@ -20,6 +20,7 @@
 7. แก้ไฟล์ใน Workspace ได้ตามความจำเป็น แต่ **ห้ามลบข้อมูลจริงหรือรัน DDL ที่ทำลายข้อมูลโดยพลการ**; เตรียม SQL migration แยกพร้อมคำอธิบายถ้าต้องเปลี่ยน schema
 8. ห้ามกล่าวว่าทดสอบผ่านเมื่อยังไม่ได้รันหรือยังไม่สามารถเชื่อมต่อระบบจริงได้; ระบุข้อจำกัดอย่างตรงไปตรงมา
 9. **โครงการเน้น Desktop เป็นหลัก:** ออกแบบและตรวจ Browser UI บน Desktop; **ไม่ต้องทดสอบ Mobile/Responsive มือถือ และไม่ใช้เป็นเกณฑ์ปิด Phase** เว้นแต่ผู้ใช้ขอเป็นงานเพิ่มเติม ภาพ/ตารางต้องใช้งานได้บน Desktop ตามเดิม ไม่ต้องรื้อ CSS Responsive ที่มีอยู่
+10. **การตรวจ UI ตั้งแต่ Phase 7 เป็นต้นไปเป็นหน้าที่ของผู้ใช้:** Agent เตรียมขั้นตอนและ Checklist ให้ผู้ใช้ตรวจ Desktop เอง ไม่เปิด/ควบคุม Browser หรือรันทดสอบ UI อัตโนมัติ เว้นแต่ผู้ใช้ร้องขอภายหลัง Agent ยังคงรัน PHP lint, backend/HTTP/DB/security/integration tests ตามความเหมาะสม และแยกผลเหล่านั้นจากผล UI ที่ผู้ใช้ยืนยัน หากยังไม่ได้รับผล UI ให้ระบุรอผู้ใช้ตรวจ ไม่อ้างว่า UI ผ่านแล้ว
 
 ## 2. ภาพรวมโปรเจกต์
 
@@ -163,6 +164,7 @@ fixit/
 | **4.2** | Student ดู/ค้นหา/กรองคำร้องตนเอง, รายละเอียด, ยกเลิก `PENDING` | พัฒนาแล้ว |
 | **4.3** | Progress Timeline, Completion Evidence, Student Confirmation | **DONE — VERIFIED (13 พ.ย. 2026; ดูหลักฐานใน PROGRESS.md)** |
 | **5** | Admin Dashboard, คำร้อง/Priority/Assignment, ห้องพัก | **DONE — VERIFIED (13 พ.ย. 2026; automated 109 checks + ผู้ใช้ยืนยัน Browser UI)** |
+| **6** | Technician Dashboard, งานที่ได้รับมอบหมาย, เริ่มงาน/ความคืบหน้า/ส่งหลักฐาน | **DONE — VERIFIED (13 พ.ย. 2026; automated 189 checks + ผู้ใช้ยืนยัน UI)** |
 
 **หมายเหตุ:** ความสำเร็จในอดีตไม่ยืนยันว่า environment ปัจจุบันยังผ่านทุกข้อ ตรวจ regression จริงเมื่อรันระบบได้
 

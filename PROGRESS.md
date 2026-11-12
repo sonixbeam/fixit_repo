@@ -8,11 +8,11 @@
 
 ## 1. สถานะล่าสุด (Current Checkpoint)
 
-- **Current Phase:** `6 — Technician`
-- **Current State:** `IMPLEMENTED — NEEDS VERIFICATION (รอ Desktop UI กรณี error/filters/pagination เพิ่มเติม)`
-- **Last Implemented Phase:** `6 — Technician (implemented); Phase 5 DONE — VERIFIED`
-- **Current Goal:** ปิด Desktop UI verification กรณีที่เหลือของ Phase 6 ตามหัวข้อ 9; ยังไม่เริ่ม Phase 7
-- **Important:** ผู้ใช้ยืนยัน Browser UI Phase 5 ผ่านครบแล้ว; ปิด Phase 5 โดยแยกผล UAT ผู้ใช้จากผล Agent รันจริง; เน้น Desktop ไม่ต้องทดสอบ Mobile; Technician integration เป็นงาน Phase 6
+- **Current Phase:** `8 — Desktop UI/UX Refinement`
+- **Current State:** `NOT STARTED — รอวางแผนจากข้อเสนอแนะผู้ใช้`
+- **Last Implemented Phase:** `7 — Reports & Integration — DONE — VERIFIED`
+- **Current Goal:** Phase 7 ปิดแล้ว; ขั้นถัดไปวางแผน Phase 8 จาก UI ปัจจุบันและข้อเสนอแนะผู้ใช้ ยังไม่เริ่ม implementation
+- **Important:** ผู้ใช้ยืนยัน “UI Phase 7 ผ่านแล้ว”; ผู้ใช้ตรวจ UI Desktop เอง Agent เตรียม Checklist และทดสอบ backend/HTTP/DB ตามปกติ ไม่ทดสอบ Mobile
 - **Verification:** ตรวจโค้ดและ SHOW CREATE TABLE จากฐานข้อมูลจริง `fixit` แล้วเมื่อ 13 พฤศจิกายน 2026; ดู Change Log ด้านล่างสำหรับผลทดสอบล่าสุด
 
 ### คำอธิบายสถานะ
@@ -34,13 +34,13 @@
 | 4.2 | Student ดู/ค้นหา/กรอง, รายละเอียด, ยกเลิก `PENDING` | พัฒนาแล้ว | ทดสอบ Ownership/Cancel/History ซ้ำ |
 | **4.3** | **Progress Timeline + Completion Evidence + Student Confirmation** | **DONE — VERIFIED (13 พ.ย. 2026)** | **Automated 35 checks + ผู้ใช้ยืนยัน UI/รูปอัปโหลด; Technician integration pending** |
 | **5** | Admin: Dashboard, กำหนด Priority, มอบหมายช่าง, ห้องพัก | **DONE — VERIFIED (13 พ.ย. 2026)** | **ชุดทดสอบ 109 checks + ผู้ใช้ยืนยัน Browser UI ครบ** |
-| **6** | Technician: งานที่ได้รับมอบหมาย, เริ่มงาน, รูปหลังซ่อม, ส่งยืนยัน | **IMPLEMENTED — NEEDS VERIFICATION** | **189 automated checks + Desktop flow หลักผ่าน; รอตรวจ UI เพิ่มเติม** |
-| 7 | Reports และ Integration/System Testing | NOT STARTED | ทดสอบ Workflow ทุก Role |
+| **6** | Technician: งานที่ได้รับมอบหมาย, เริ่มงาน, รูปหลังซ่อม, ส่งยืนยัน | **DONE — VERIFIED (13 พ.ย. 2026)** | **189 automated checks + ผู้ใช้ยืนยัน UI ที่เหลือ** |
+| **7** | Reports และ Integration/System Testing | **DONE — VERIFIED (13 พ.ย. 2026)** | **247 automated checks + ผู้ใช้ยืนยัน Desktop UI ผ่านแล้ว** |
 | 8 | Desktop UI/UX Refinement | NOT STARTED | ปรับ UI ภายหลัง; Mobile ไม่เป็นเกณฑ์ทดสอบ |
 
 > Phase 5–6 สามารถสลับลำดับหรือแบ่งงานเป็นช่วงสั้น ๆ ตาม Dependencies จริง โดยบันทึกเหตุผลที่นี่ก่อนปรับ Roadmap; ห้ามขยาย Scope เงียบ ๆ
 
-## 3. Checklist ที่ปิดแล้ว — Phase 4.3 (ดู Current Phase 6 ในหัวข้อ 9)
+## 3. Checklist ที่ปิดแล้ว — Phase 4.3 (ดู Current Phase 7 ในหัวข้อ 10)
 
 ### 3.1 Audit ก่อนเขียนโค้ด
 
@@ -297,7 +297,7 @@
 - ขอบเขตใหม่: Desktop เป็นหลัก ไม่ต้องทดสอบ Mobile/Responsive มือถือ ไม่ต้องรื้อ CSS Responsive เดิม
 - รอบนี้แก้เอกสาร AGENTS.md, PROGRESS.md, tests/README.md เท่านั้น; ยังไม่เขียนโค้ด Phase 6
 
-## 9. Current Phase 6 — Technician (IMPLEMENTED — NEEDS VERIFICATION)
+## 9. Checklist ที่ปิดแล้ว — Phase 6 Technician (DONE — VERIFIED)
 
 ### เป้าหมายและ Dependencies
 
@@ -339,12 +339,12 @@
 - [x] 6.4 ทดสอบเริ่มซ้ำ/หมายเหตุ/อัปโหลดถูก-ผิด-ไม่มีรูป-เกินขนาด/state ไม่ถูกต้อง/terminal state พร้อม audit
 - [x] 6.4 ทดสอบ rollback และ race: start vs cancel/reassign, submit พร้อมกัน, submit vs note; active assignment/completion/history ต้องสอดคล้อง
 - [x] 6.4 Regression Phase 4–5 และ workflow ผ่าน HTTP จริง: Student สร้าง → Admin มอบหมาย → Technician เริ่ม/บันทึก/ส่งรูป → Student ดูรูปและยืนยัน → ทุก Role เห็น COMPLETED
-- [ ] 6.4 ตรวจ Browser UI บน Desktop: navigation/list/detail/forms/รูป/Timeline/error-success/ปุ่มตามสิทธิ์; ไม่ทดสอบ Mobile
+- [x] 6.4 ตรวจ Browser UI บน Desktop: ผู้ใช้ยืนยันว่าตรวจเรียบร้อยแล้ว; ไม่ทดสอบ Mobile
 - [x] อัปเดต PROGRESS.md พร้อม PASS/FAIL/NOT RUN และไฟล์/migration/ข้อจำกัดจริง ก่อนปิด Phase 6; Phase 7 ทำรายงานและ Integration เพิ่มเติม
 
 - [x] Desktop Chrome flow หลัก: Dashboard/list/detail/start/progress/upload/success/รอยืนยันอ่านอย่างเดียว/Timeline
-- [ ] Desktop UI filters/pagination หลายหน้า และกรณี error/สิทธิ์ปฏิเสธให้ครบ (HTTP ผ่านแล้ว); ไม่ทดสอบ Mobile
-- [ ] ปิด Phase 6 หลัง verification ที่เหลือผ่าน; ยังไม่เริ่ม Phase 7
+- [x] Desktop UI ที่เหลือ: ผู้ใช้ยืนยันการตรวจแล้ว แยกจากผล HTTP ของ Agent
+- [x] ปิด Phase 6 และเปลี่ยน Current Phase เป็น 7 เพื่อวางแผน ยังไม่เริ่มโค้ด Phase 7
 
 ### ไฟล์ Phase 6 และแผนที่ใช้
 
@@ -390,3 +390,117 @@ Checklist งานที่จำเป็นต้องผ่านจริ�
 - Preview server loopback ปิดแล้ว; รูป fixture/รูป upload ของ preview ลบเฉพาะที่สร้างเอง ฐานทดสอบคงอยู่เพื่อดู audit แต่รูปชั่วคราวไม่คงอยู่
 - ข้อจำกัด: ภาพยังเป็น static URL; ไม่มี Reject/Reopen/แก้หลักฐานหลังส่ง; assignment หลาย active แถวถูกปฏิเสธไม่แก้ข้อมูลจริงอัตโนมัติ
 - งานถัดไป: ตรวจ Desktop UI รายการ NOT RUN แล้วบันทึกหลักฐานก่อนปิด Phase 6
+
+### 2026-11-13 — ปิด Phase 6 และวางแผน Phase 7
+
+- Phase 6: DONE — VERIFIED โดยผู้ใช้ยืนยันว่าตรวจเรียบร้อยแล้ว รวม UI ที่ค้าง; ไม่อ้างว่า Agent รัน UI ส่วนดังกล่าวเอง
+- หลักฐานก่อนหน้า: automated 189 checks ใน fixit_test_c68547590cb8, PHP lint 30 ไฟล์ และ Desktop Chrome flow หลักตามบันทึก implementation
+- PASS: รับผล UI/UAT ตามคำยืนยันของผู้ใช้; FAIL: ไม่มีรายการค้างที่รายงานล่าสุด; NOT RUN รอบนี้: ไม่รันทดสอบแอปซ้ำ/ไม่ทดสอบ Phase 7 เพราะแก้เฉพาะเอกสาร
+- Current Phase: 7 — Reports & Integration, PLANNED — NOT STARTED
+- การแบ่งงานถาวร: ผู้ใช้ตรวจ Desktop UI เอง Agent เตรียม Checklist และรัน backend/HTTP/DB/security/integration tests; Mobile ไม่ต้องทดสอบ
+- Database Changes: ไม่มี migration/schema/data changes ในรอบนี้
+- ข้อจำกัดส่งต่อ: static image URLs, ไม่มี unique active assignment ใน DB, ไม่มี Reject/Reopen หรือแก้หลักฐานหลังส่ง; ไม่เพิ่มฟังก์ชันเหล่านี้เงียบ ๆ ใน Phase 7
+- ไฟล์เอกสารที่แก้: AGENTS.md, PROGRESS.md, tests/README.md; ยังไม่เขียนโค้ด Reports หรือ tests Phase 7
+
+## 10. Phase 7 — Reports & Integration (DONE — VERIFIED)
+
+### เป้าหมายและขอบเขต
+
+ให้ Admin ดูรายงานจากข้อมูลจริงตามช่วงวันที่แจ้ง สถานะ หมวดหมู่ และช่าง พร้อมตรวจความสอดคล้องของ workflow ทุก Role ต่อจากระบบที่พัฒนาแล้ว ใช้ Native PHP/PDO/CSS เดิม ไม่สร้าง Dashboard ซ้ำทั้งระบบ ไม่เพิ่ม User Management, Reject/Reopen หรือระบบสถิติขนาดใหญ่
+
+รายงานหลักที่เสนอ: ภาพรวมจำนวนคำร้อง, สรุปตามสถานะ/ความสำคัญ/หมวดหมู่, งานที่รับมอบหมายและงานส่งซ่อมของช่าง และรายการคำร้องประกอบที่กรองได้ หน้า reports เป็น read-only ใช้ GET และ requireRole('ADMIN'); export CSV/PDF/Excel และกราฟเพิ่มเติมยังไม่อยู่ใน scope เว้นแต่ผู้ใช้ขอ
+
+### นิยามข้อมูลที่ต้องตกลงใน implementation
+
+| ประเด็น | แนวทางที่เสนอ |
+|---|---|
+| ช่วงเวลา | ใช้ repair_request.created_at เป็นฐานเดียวกันในรายงานหลัก แสดงชัดว่าเป็นวันที่แจ้ง; วันสิ้นสุดรวมทั้งวันด้วยขอบเขต < วันถัดไป ตรวจวันที่จริง/เริ่มไม่เกินสิ้นสุด และ timezone ของ PHP/MySQL ก่อนเขียน query |
+| จำนวนรวม | นับคำร้องไม่ซ้ำจาก request_id ไม่ให้ join assignment/history ทำให้จำนวนพอง; ผลรวมสถานะและหมวดหมู่ต้องตรงกับยอดรวมในตัวกรองเดียวกัน |
+| รอนักศึกษายืนยัน | เป็นส่วนหนึ่งของ IN_PROGRESS ที่มี completion ยังไม่ยืนยัน ไม่เพิ่ม status และไม่บวกซ้ำเข้า total |
+| รายงานช่าง | แยกงานที่ได้รับมอบหมายปัจจุบันจาก active assignment กับงานที่ส่งหลักฐานจริงจาก completion.submitted_by_user_id ไม่เหมารวมว่าผู้รับงานคนปัจจุบันเป็นผู้ซ่อมทุกครั้ง |
+| Reassignment/ข้อมูลผิดปกติ | เก็บประวัติเดิม ไม่ join ทุก assignment มานับซ้ำ; ตรวจหลาย active ต่อคำร้องและแจ้งความผิดปกติ ไม่แก้ข้อมูลจริงหรือเลือกช่างสมมุติเงียบ ๆ |
+| COMPLETED | ใช้สถานะปิดงานและข้อมูล Student confirmation ที่มีจริง; หากพบ COMPLETED เดิมแต่ไม่มี completion ให้รายงานความต่าง ไม่สร้างข้อมูลยืนยันย้อนหลัง |
+| ระยะเวลาซ่อม | ยังไม่เพิ่ม KPI ระยะเวลาซ่อมหรือคะแนนช่างโดยอนุมาน created_at เป็นเวลาเริ่มซ่อม; หากจำเป็นต้องกำหนดนิยามและข้อมูลต้นทางก่อน |
+| Empty State | ช่วงที่ไม่มีข้อมูลต้องแสดง 0/ไม่พบข้อมูล ไม่แต่งกราฟ/เหตุการณ์ และไม่หารด้วยศูนย์ |
+
+### Dependencies และแนวทางเปลี่ยนแปลงให้น้อยที่สุด
+
+- Reuse auth/role/e(), helpers และ repair_request/category/assignment/completion/history เดิม ตรวจ schema และข้อมูลจริงอีกครั้งก่อนเริ่ม
+- ต่อเมนู Reports จาก Admin header/Dashboard เดิม ไม่เปลี่ยน owner scope ของ Student/Technician
+- ใช้ aggregate/subquery หรือ EXISTS ที่เหมาะสม แยก query สรุปกับรายการประกอบ; prepared statements สำหรับ filters และ validate/allowlist ทุกค่า
+- คาดว่าไม่ต้องเปลี่ยน schema; เพิ่ม index/migration เฉพาะเมื่อ EXPLAIN/หลักฐานจริงแสดงความจำเป็น ไม่ปรับ PK/ENUM และไม่ลบข้อมูล
+- ผล automated tests เดิม 189 checks เป็น baseline ให้รันซ้ำในรอบ implementation พร้อมเพิ่ม tests รายงาน ไม่ถือว่า Phase 7 ผ่านจากผลเก่า
+
+### Checklist และลำดับดำเนินงาน
+
+- [x] 7.0 ตรวจ schema/query/เวลาและ data anomalies จริงแบบ read-only พร้อมทบทวนนิยามรายงานข้างต้น
+- [x] 7.1 เพิ่มหน้า Reports เฉพาะ Admin พร้อมตัวกรองวันที่แจ้ง/สถานะ/หมวดหมู่/ช่าง/ความสำคัญ และ validate วันที่ผิด/ค่าว่าง/ขอบเขต
+- [x] 7.1 สรุปยอดรวมตามสถานะ/Priority/หมวดหมู่ แสดง waiting เป็น subset ของ IN_PROGRESS
+- [x] 7.1 รายงานช่างแยก active assignment กับ submitted completion และคง attribution เมื่อเปลี่ยนช่าง
+- [x] 7.1 รายการคำร้องประกอบจาก filters เดียวกับ summary พร้อม pagination/ลิงก์รายละเอียด/Empty State
+- [x] 7.1 เพิ่ม navigation ใน Admin เดิม และใช้ components เดิมเน้น Desktop ไม่ redesign ทั้งระบบ
+- [x] 7.2 ทดสอบ aggregate กับชุดข้อมูลที่รู้ยอดแน่นอน รวมหลาย history/reassign/รอยืนยัน/cancel/ไม่มีข้อมูล ไม่เกิดการนับซ้ำ
+- [x] 7.2 ทดสอบวันต้น-วันท้าย/ข้ามเดือน/ปี/วันที่ผิด/เวลาเท่ากัน และตรวจ totals ระหว่าง summary กับรายการประกอบ
+- [x] 7.2 ทดสอบรายงานเป็น read-only: anonymous/STUDENT/TECHNICIAN เข้าไม่ได้, filters ผิดไม่ crash/ไม่รั่ว SQL และ escape output
+- [x] 7.2 Regression ชุดเดิมและ HTTP workflow ทุก Role พร้อม rollback/concurrency/upload/ownership/state validation ตามความเสี่ยงที่เปลี่ยนจริง
+- [x] 7.2 เพิ่มรายงานตรวจความสอดคล้องใน tests: completion/ผู้ยืนยัน/เวลาปิด/history/assignment ไม่ขัดกัน โดยไม่ซ่อมข้อมูลจริงอัตโนมัติ
+- [x] 7.3 Agent เตรียม Desktop UI checklist และข้อมูลตัวอย่าง/ยอดคาดหวังให้ผู้ใช้ตรวจเอง ไม่เปิด Browser อัตโนมัติ
+- [x] 7.3 ผู้ใช้ยืนยัน “UI Phase 7 ผ่านแล้ว” — USER VERIFIED แยกจาก automated PASS
+- [x] บันทึกไฟล์/migration/PASS/FAIL/NOT RUN/ข้อจำกัดจริง และปิด Phase 7 เป็น DONE — VERIFIED
+
+### ไฟล์ Phase 7 และแผนที่ใช้
+
+| ไฟล์ | แผน |
+|---|---|
+| admin/reports.php | สร้างรายงาน/filters/summary/รายการประกอบในหน้าเดียว |
+| includes/repair-reports.php | สร้าง helpers สำหรับนิยาม filter/aggregate เมื่อช่วยให้ queries และ tests ใช้ตรงกัน |
+| includes/admin-header.php | เพิ่มลิงก์ Reports |
+| admin/dashboard.php | เพิ่มทางเข้ารายงาน/ส่งต่อ filters; คง dashboard เดิม |
+| assets/css/style.css | เพิ่มเฉพาะ component รายงาน Desktop ที่จำเป็น |
+| tests/phase7.php, tests/router.php | เพิ่ม fixtures ที่รู้ยอด, report/security/integration tests และ route ทดสอบ |
+| tests/README.md, PROGRESS.md | เพิ่มวิธี rerun/expected totals/Checklist Desktop ที่ผู้ใช้เป็นผู้ตรวจ |
+| migrations/<date>_<purpose>.sql | เพิ่มเฉพาะเมื่อมีหลักฐานจำเป็น ปัจจุบันยังไม่เสนอ DDL ใหม่ |
+
+### เกณฑ์ปิด Phase 7
+
+รายงานนับถูกตามนิยามเดียวกัน ไม่ซ้ำจาก joins มีสิทธิ์ Admin และ workflow เดิมไม่เสีย; Agent มีผล backend/HTTP/DB tests จริง และผู้ใช้รับรอง Desktop UI แล้ว จึงปิดเป็น DONE — VERIFIED พร้อมหลักฐาน จากนั้นค่อยวางแผน Phase 8 Desktop UI/UX Refinement ตามข้อเสนอแนะผู้ใช้ ไม่ทดสอบ Mobile
+
+### 2026-11-13 — Phase 7 implementation และ backend verification
+
+- สถานะ: IMPLEMENTED — NEEDS VERIFICATION; รอผู้ใช้ตรวจ Desktop UI ไม่เปิด Browser และไม่เริ่ม Phase 8
+- Audit DB จริง: repair_request/assignment/completion ยังเป็น INT UNSIGNED/InnoDB และสถานะสี่ค่าเดิม; ไม่มี duplicate active assignment หรือ COMPLETED ที่ไม่มี confirmation ในฐานจริง ณ เวลา inspect
+- พบ timezone PHP=Europe/Berlin แต่ MySQL SYSTEM=เวลาไทย (+07:00); รายงานใช้ DateTimeZone Asia/Bangkok และ SET SESSION time_zone='+07:00' เฉพาะ connection ที่อ่านรายงาน ไม่แก้ timezone global/config ของระบบเดิม
+- ไฟล์เพิ่ม: admin/reports.php (Admin GET-only filters/summary/รายการประกอบ/pagination/แจ้งข้อมูลผิดปกติ), includes/repair-reports.php (strict validation/ขอบเขตวันไทย/aggregate และ consistent read snapshot)
+- ไฟล์แก้: includes/admin-header.php และ admin/dashboard.php เพิ่มทางเข้ารายงาน; tests/router.php เพิ่ม route; ไม่ต้องเพิ่ม CSS เพราะ reuse components เดิมได้
+- รายงาน: ช่วงวันที่แจ้งรวมวันสิ้นสุด, สถานะ/Priority/category/technician filters, ยอดรวม/สถานะ/หมวดหมู่/ความสำคัญ, waiting subset ของ IN_PROGRESS, unassigned เฉพาะ PENDING; รายการ 25 แถวต่อหน้า
+- รายงานช่าง: current assignment ใช้ COUNT DISTINCT request ส่วน submitted/confirmed นับตามผู้ส่ง completion จริง; เลือกช่างแล้ว cohort รวมคำร้องที่ปัจจุบันรับมอบหมายหรือเคยส่งหลักฐานโดยช่างนั้น ตารางช่างแสดงเฉพาะช่างที่เลือก พร้อมคำอธิบายไม่ให้นำคอลัมน์ที่ซ้อนกันมาบวก
+- ทุก query สรุป/รายละเอียดอยู่ใน REPEATABLE READ / READ ONLY transaction เดียว ไม่ fan-out join history/assignment เพื่อคำนวณ total; ไม่แก้ข้อมูลแม้ตรวจพบความผิดปกติ
+- แจ้งความผิดปกติ: assignment active ซ้ำ, COMPLETED แต่ยืนยันไม่ครบ/ไม่ใช่ owner, confirmed fields/status ไม่ตรงกัน, วันเวลาผิดลำดับ และผู้ส่งหลักฐาน/assignment ไม่สอดคล้อง; ไม่เพิ่มการยืนยันย้อนหลังหรือซ่อมข้อมูลจริงอัตโนมัติ
+- Database Changes: ไม่มี DDL/migration/index ใหม่ ไม่เปลี่ยน ENUM/PK และไม่มี write กับข้อมูลจริง fixit
+- Tests เพิ่ม: tests/phase7.php ต่อ regression Phase 4.3–6; รันล่าสุดผ่าน 247 checks ใน fixit_test_d0aab8062472 (checks ใน race บางเส้นทางขึ้นกับลำดับผู้ชนะ จึงรายงานจำนวนตามรอบจริง)
+- PASS: fixture ยอด 5 คำร้อง แบ่งสถานะ 1/2/1/1, Priority 2/2/1, หมวด 2/3; totals ตรงรายละเอียดแม้มี history มาก/reassign/duplicate active; waiting=1 และไม่บวกซ้ำ
+- PASS: attribution ช่างผู้ส่งจริงแยกจาก assignee ปัจจุบัน, ช่างที่เลือก/ตัวกรองผสม, leap day/midnight/23:59:59/ข้ามเดือนและปี, timezone ก่อนหน้าเป็น UTC ก็ได้ผลวันไทยถูกต้อง
+- PASS: invalid date/range/enum/array/ID/injection-like filter ถูกปฏิเสธ, Empty State เป็นศูนย์, pagination 30 แถวแบ่ง 25+5 คง filters และ totals ไม่เปลี่ยน/ไม่ซ้ำเมื่อเวลาเท่ากัน
+- PASS: HTTP Admin GET=200, anonymous/STUDENT/TECHNICIAN GET/POST ไม่ผ่าน role, Admin POST=405, malformed filters=400 ไม่รั่ว SQL, escape หัวข้อ/หมวดหมู่, navigation และ snapshot ก่อน/หลังยืนยันว่าไม่มีการแก้ข้อมูล
+- PASS: consistency ของ workflow จริงจาก Phase 6 ยังมี completion/owner/เวลาปิด/history หนึ่งครั้งและเวลายืนยันไม่ก่อนส่ง; fixtures ข้อมูลเก่าหรือเวลาผิดถูกตรวจพบโดยไม่ backfill
+- PASS: PHP lint ทั้ง 33 ไฟล์ และ git diff --check
+- FAIL รอบล่าสุด: ไม่มี
+- NOT RUN: UI/visual/Desktop Browser — เป็นหน้าที่ผู้ใช้ตามคำสั่ง; Mobile ไม่อยู่ใน scope; ไม่ทดสอบ load/performance ข้อมูลขนาดใหญ่หรือ export ที่ยังไม่อยู่ใน scope
+- งานส่งต่อ: tests/phase7-ui-checklist.md มีขั้นตอนและตัวเลข fixture อ้างอิงให้ผู้ใช้ตรวจ; tests/README.md มีคำสั่ง rerun/นิยามตัวกรอง/วิธี reset ฐานแยก
+- ข้อจำกัด: รายงานนับ submission จาก record ไม่ยืนยันไฟล์รูปย้อนหลังทุกไฟล์; ข้อมูล active ซ้ำทำให้คำร้องเดียวอยู่ในยอดหลายช่างได้ จึงแจ้งเตือน ไม่อ้างว่ายอดรายช่างรวมต้องเท่ากับ total; ไม่มี KPI ระยะเวลาซ่อม/export/กราฟเพิ่มเติม
+
+### 2026-11-13 — ปิด Phase 7 ตามผล UI ของผู้ใช้
+
+- ผู้ใช้ยืนยันโดยตรงว่า “UI Phase 7 ผ่านแล้ว” จึงบันทึก Desktop UI เป็น PASS — USER VERIFIED; ไม่ได้อ้างว่า Agent เปิด Browser และไม่ได้รับผลแยกรายข้อ
+- ปิด Phase 7 เป็น DONE — VERIFIED โดยใช้ผล automated 247 checks, PHP lint 33 ไฟล์ และ diff check ที่รันก่อนหน้า ร่วมกับผล UI ของผู้ใช้; ไม่มี FAIL ที่รายงานค้าง
+- รอบรับรองนี้แก้เฉพาะ AGENTS.md, PROGRESS.md, tests/README.md และ tests/phase7-ui-checklist.md; ไม่เปลี่ยน application code, Database หรือ Migration และไม่รัน automated tests ซ้ำ
+- Mobile ไม่อยู่ใน scope; load/performance ข้อมูลขนาดใหญ่และ export ยังไม่ได้ทดสอบและไม่ได้เพิ่มเป็น requirement ข้อจำกัดข้อมูลเก่า/รูปย้อนหลังตามบันทึก implementation ยังคงเดิม
+- เลื่อน Current Phase เป็น 8 — Desktop UI/UX Refinement, NOT STARTED เพื่อเตรียมวางแผน ยังไม่เริ่มเขียนโค้ด
+
+## 11. Current Phase 8 — Desktop UI/UX Refinement (NOT STARTED)
+
+- [ ] สำรวจ Desktop UI และ CSS/components ที่มีอยู่ พร้อมรวบรวมข้อเสนอแนะหรือจุดที่ต้องปรับจากผู้ใช้
+- [ ] ร่างขอบเขตและไฟล์ที่ต้องแก้ตามปัญหาจริง โดยคง workflow, security และ Requirements เดิม ไม่ redesign ทั้งระบบหรือเพิ่ม Mobile scope
+- [ ] กำหนด Acceptance Criteria และ regression ที่เหมาะกับไฟล์ที่จะเปลี่ยน พร้อม Checklist Desktop สำหรับผู้ใช้
+- [ ] ดำเนิน implementation ตามแผนเมื่อได้รับคำสั่งเริ่ม Phase 8
+- [ ] บันทึกผล backend/HTTP/DB ที่เกี่ยวข้องและผล UI จากผู้ใช้แยกกัน ก่อนพิจารณาปิด Phase

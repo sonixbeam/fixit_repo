@@ -20,6 +20,7 @@ if (!isset($user, $pageTitle) || ($user['role'] ?? '') !== 'ADMIN') {
         <a href="dashboard.php">ภาพรวม</a>
         <a href="requests.php">คำร้องทั้งหมด</a>
         <a href="rooms.php">ห้องพัก</a>
+        <a href="reports.php">รายงาน</a>
         <a class="logout" href="../logout.php">ออกจากระบบ</a>
     </nav>
 </header>
