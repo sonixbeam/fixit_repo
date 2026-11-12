@@ -1,0 +1,52 @@
+<?php
+require_once __DIR__ . '/../includes/auth.php';
+
+$user = requireRole('TECHNICIAN');
+?>
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <title>Technician Dashboard - FixIT</title>
+    <link rel="stylesheet"
+          href="../assets/css/style.css">
+</head>
+<body>
+
+<header class="navbar">
+    <h2>FixIT | Technician</h2>
+    <div>
+        <?= e($user['username']) ?>
+        &nbsp;
+        <a class="logout" href="../logout.php">
+            ออกจากระบบ
+        </a>
+    </div>
+</header>
+
+<main class="container">
+    <h1>หน้าหลักช่างซ่อม</h1>
+    <p class="subtitle">
+        ยินดีต้อนรับ <?= e($user['username']) ?>
+    </p>
+
+    <div class="cards">
+        <div class="card">
+            <h3>งานซ่อมที่ได้รับมอบหมาย</h3>
+            <p>ดูรายการงานซ่อมของตนเอง</p>
+            <small>เตรียมพัฒนา</small>
+        </div>
+
+        <div class="card">
+            <h3>อัปเดตสถานะงานซ่อม</h3>
+            <p>เปลี่ยนสถานะงานที่กำลังดำเนินการ</p>
+            <small>เตรียมพัฒนา</small>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>
