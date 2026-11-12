@@ -132,3 +132,31 @@ form button[type="submit"] {
 .btn-my-requests:hover {
     background-color: #1d4ed8;
 }
+
+/* Admin styles จำกัด scope เพื่อรักษาหน้า Student เดิม */
+.admin-page nav, .admin-page .admin-filters, .admin-pagination { display:flex; gap:14px; flex-wrap:wrap; align-items:center; }
+.admin-page .admin-filters { align-items:end; margin-bottom:24px; }
+.admin-page label { display:grid; gap:7px; }
+.admin-page input, .admin-page select, .admin-page textarea { font:inherit; padding:10px; border:1px solid #cbd5e1; border-radius:6px; }
+.admin-page button { padding:11px 18px; font:inherit; }
+.admin-page main a { color:#1e40af; }
+.admin-page .admin-form { display:grid; gap:16px; max-width:600px; margin:20px 0; }
+.admin-page .admin-form button { justify-self:start; }
+.admin-table-wrap { overflow-x:auto; }
+.admin-table { border-collapse:collapse; width:100%; }
+.admin-table th, .admin-table td { text-align:left; padding:14px 12px; border-bottom:1px solid #e2e8f0; overflow-wrap:anywhere; }
+.admin-table th { background:#f8fafc; }
+.admin-info { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:20px; }
+.admin-info dt { color:#64748b; margin-bottom:7px; }
+.admin-info dd { margin:0; overflow-wrap:anywhere; }
+.admin-description { white-space:pre-wrap; overflow-wrap:anywhere; background:#f8fafc; padding:16px; border-radius:8px; }
+.admin-image { max-width:100%; max-height:450px; border-radius:8px; margin:12px 0; }
+.admin-alert { padding:16px; border-radius:8px; }
+.admin-alert.success { background:#dcfce7; color:#166534; }
+.admin-alert.error { background:#fee2e2; color:#991b1b; }
+.admin-event, .admin-timeline li { margin-bottom:20px; border-bottom:1px solid #e2e8f0; padding-bottom:16px; }
+.admin-pagination { margin-top:20px; }
+@media(max-width:600px) { .admin-page .panel { padding:16px; } .admin-page h1 { font-size:26px; } .admin-page .admin-filters label { width:100%; } }
+
+.admin-page .admin-request-table { min-width: 900px; }
+.admin-page .admin-room-table { min-width: 640px; }

@@ -4,7 +4,7 @@
 >
 > **การอ่านร่วมกัน:** `AGENTS.md` = ข้อกำหนดและกฎการพัฒนา, `PROGRESS.md` = สถานะ Phase ปัจจุบัน, Checklist, ผลทดสอบ และงานถัดไป
 >
-> **จุดเริ่มต้น ณ 13 พฤศจิกายน 2026:** ถือว่า Phase 1–4.2 พัฒนาแล้ว และเริ่ม Phase 4.3 ใหม่; หลังจบ Phase 4.3 ให้ดู Current Phase ล่าสุดใน `PROGRESS.md` แทนการทำ Phase 4.3 ซ้ำ
+> **สถานะอ้างอิง ณ 13 พฤศจิกายน 2026:** Phase 4.3 และ Phase 5 ปิดเป็น DONE — VERIFIED โดยมีผล automated tests และผู้ใช้ยืนยัน Browser UI; Current Phase เป็น Phase 6 Technician (วางแผน ยังไม่เริ่มโค้ด) ตาม `PROGRESS.md` ไม่ต้องย้อนทำ Phase เดิมซ้ำ
 
 ## 1. บทบาทและหลักการทำงานของ Agent
 
@@ -19,6 +19,7 @@
 6. สื่อสารกับผู้ใช้เป็น **ภาษาไทย** อธิบายการเปลี่ยนแปลงและวิธีทดสอบอย่างเป็นขั้นตอน; โค้ด/ชื่อไฟล์/ตัวแปรใช้มาตรฐานของโปรเจกต์เดิม
 7. แก้ไฟล์ใน Workspace ได้ตามความจำเป็น แต่ **ห้ามลบข้อมูลจริงหรือรัน DDL ที่ทำลายข้อมูลโดยพลการ**; เตรียม SQL migration แยกพร้อมคำอธิบายถ้าต้องเปลี่ยน schema
 8. ห้ามกล่าวว่าทดสอบผ่านเมื่อยังไม่ได้รันหรือยังไม่สามารถเชื่อมต่อระบบจริงได้; ระบุข้อจำกัดอย่างตรงไปตรงมา
+9. **โครงการเน้น Desktop เป็นหลัก:** ออกแบบและตรวจ Browser UI บน Desktop; **ไม่ต้องทดสอบ Mobile/Responsive มือถือ และไม่ใช้เป็นเกณฑ์ปิด Phase** เว้นแต่ผู้ใช้ขอเป็นงานเพิ่มเติม ภาพ/ตารางต้องใช้งานได้บน Desktop ตามเดิม ไม่ต้องรื้อ CSS Responsive ที่มีอยู่
 
 ## 2. ภาพรวมโปรเจกต์
 
@@ -98,7 +99,7 @@ PENDING -> Student เจ้าของคำร้องยกเลิก: CA
 
 ## 5. Database ที่เคยออกแบบ
 
-ไฟล์ SQL เดิมชื่อ `fixit.sql` (ให้ค้นหาไฟล์จริงก่อนใช้งาน)
+ไฟล์ SQL ปัจจุบันพบที่ `database/fixit.sql` (ตรวจไฟล์และ schema จริงก่อนใช้งาน); Phase 4.3 มี migration แยกใน `migrations/20261113_repair_completion.sql` ต้องใช้ร่วมกันเมื่อเตรียมฐานใหม่
 
 **ตารางหลักที่เคยตกลงไว้** (ต้องตรวจสอบชื่อ/คอลัมน์/ชนิดข้อมูลจาก schema จริงก่อนเขียน query):
 
@@ -160,7 +161,8 @@ fixit/
 | **3** | Login/Logout, Session, Role Access | ผู้ใช้เคยทดสอบผ่านครบ 7 ข้อ |
 | **4.1** | Student สร้างคำร้องห้องตน/พื้นที่ส่วนกลาง, รูปปัญหา optional, `PENDING`/`MEDIUM`, history | พัฒนาแล้ว |
 | **4.2** | Student ดู/ค้นหา/กรองคำร้องตนเอง, รายละเอียด, ยกเลิก `PENDING` | พัฒนาแล้ว |
-| **4.3** | Progress Timeline, Completion Evidence, Student Confirmation | **ต้องเริ่มใหม่** |
+| **4.3** | Progress Timeline, Completion Evidence, Student Confirmation | **DONE — VERIFIED (13 พ.ย. 2026; ดูหลักฐานใน PROGRESS.md)** |
+| **5** | Admin Dashboard, คำร้อง/Priority/Assignment, ห้องพัก | **DONE — VERIFIED (13 พ.ย. 2026; automated 109 checks + ผู้ใช้ยืนยัน Browser UI)** |
 
 **หมายเหตุ:** ความสำเร็จในอดีตไม่ยืนยันว่า environment ปัจจุบันยังผ่านทุกข้อ ตรวจ regression จริงเมื่อรันระบบได้
 
@@ -192,7 +194,7 @@ fixit/
 
 ### 8.4 Completion Storage & Migration
 
-- ก่อนหน้านี้ **เคยเสนอ** ตาราง `repair_completion` เช่น `request_id`, `completion_photo_path`, `submitted_at`, `confirmed_at`, `confirmed_by_user_id` แต่ **ยังไม่ถือว่าสร้างสำเร็จ**
+- ปัจจุบันมีตาราง `repair_completion` จาก migration Phase 4.3 แล้ว รวมผู้ส่ง/ภาพ/หมายเหตุ/เวลาส่ง/ผู้ยืนยัน/เวลายืนยัน; ตรวจ schema จริงก่อนเปลี่ยนและห้ามสร้างตารางซ้ำเพื่อเริ่มใหม่
 - ตรวจ schema จริงทั้งหมดก่อนตัดสินใจว่าจะใช้ตารางเดิม, เพิ่มตารางใหม่ หรือใช้รูปแบบอื่น
 - หากต้องเพิ่ม FK ให้ Data Type ตรงทั้ง `INT`/`BIGINT`, Signed/Unsigned และข้อกำหนดอื่นตาม MySQL
 - เขียน migration ที่ปลอดภัย รันซ้ำได้เท่าที่เหมาะสม และไม่ลบข้อมูล
@@ -243,12 +245,12 @@ fixit/
 - แยกภาพปัญหาและภาพหลังซ่อมให้ชัดเจน
 - หากเพิ่ม/แก้ไข SQL อย่าปรับเปลี่ยนชนิด Primary Key หรือ DROP ข้อมูลจริงโดยไม่จำเป็น
 
-## 11. Roadmap หลัง Phase 4.3 (ยังไม่ใช่งานตอนนี้)
+## 11. Roadmap หลัง Phase 4.3 (ใช้ Current Phase จาก PROGRESS.md)
 
 - **Admin:** Dashboard, ดู/กรองคำร้องทั้งหมด, กำหนด Priority, มอบหมายช่าง, จัดการข้อมูลห้อง, ดูภาพรวม
 - **Technician:** Dashboard, ดูงานที่ได้รับมอบหมาย, เริ่มซ่อม, อัปเดต, อัปโหลดหลักฐานหลังซ่อม และส่งให้นักศึกษายืนยัน
 - **Reports & Integration:** รายงานตามสถานะ/หมวดหมู่/ช่าง, ทดสอบ Workflow ทุก Role
-- **UI/UX Refinement:** ปรับ Responsive, Navigation, Dashboard, Component consistency ภายหลัง
+- **UI/UX Refinement:** ปรับ Desktop Layout, Navigation, Dashboard และ Component consistency ภายหลัง; Mobile ไม่อยู่ในเกณฑ์ทดสอบปัจจุบัน
 
 > ลำดับทำ **Admin ก่อน Technician หรือ Technician ก่อน Admin** ยังปรับได้ตามความจำเป็นด้าน Integration; ห้ามถือเป็นเหตุให้ขยาย Scope ของ Phase 4.3 ไปทำ Admin/Technician เต็มระบบทันที
 

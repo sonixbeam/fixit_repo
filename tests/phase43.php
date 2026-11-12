@@ -38,7 +38,19 @@ function fixture(PDO $pdo, string $photo, string $status = 'IN_PROGRESS'): int {
     return $id;
 }
 function rejected(callable $fn, string $message) {
-    try { $fn(); } catch (Throwable $ex) { check(true, $message); return; }
+    global $pdo;
+    $before=$pdo->query('SELECT request_id,status,completed_at FROM repair_request ORDER BY request_id')->fetchAll();
+    $completionBefore=$pdo->query('SELECT * FROM repair_completion ORDER BY request_id')->fetchAll();
+    $historyBefore=$pdo->query('SELECT * FROM repair_history ORDER BY history_id')->fetchAll();
+    try { $fn(); } catch (Throwable $ex) {
+        $expected=$message==='history failure injected'
+            ? $ex instanceof PDOException && ($ex->errorInfo[0]??'')==='45000'
+            : get_class($ex)===RuntimeException::class && $ex->getMessage()==='Repair is not ready for confirmation';
+        check($expected && $before===$pdo->query('SELECT request_id,status,completed_at FROM repair_request ORDER BY request_id')->fetchAll()
+            && $completionBefore===$pdo->query('SELECT * FROM repair_completion ORDER BY request_id')->fetchAll()
+            && $historyBefore===$pdo->query('SELECT * FROM repair_history ORDER BY history_id')->fetchAll(), $message.' with expected error and unchanged data');
+        return;
+    }
     check(false, $message);
 }
 $server = null;
@@ -111,6 +123,14 @@ try {
     check($http('login.php',['username'=>'test1','password'=>$password])[0]===302,'login password_verify');
     [$code,$body]=$http('student/request-detail.php?id='.$id);
     check($code===200 && str_contains($body,'&lt;test&gt;') && str_contains($body,'value="confirm"'), 'owner timeline escaped and confirmation displayed');
+    $timeline=$pdo->prepare("INSERT INTO repair_history (request_id,changed_by_user_id,old_status,new_status,note,changed_at) VALUES (?,3,'IN_PROGRESS','IN_PROGRESS',?,?)");
+    foreach ([['timeline-late','2026-01-02 12:00:00'],['timeline-first','2026-01-01 12:00:00'],['timeline-tie','2026-01-01 12:00:00']] as [$note,$at]) {
+        $timeline->execute([$id,$note,$at]);
+    }
+    $timelineBody=$http('student/request-detail.php?id='.$id)[1];
+    check(strpos($timelineBody,'timeline-first')<strpos($timelineBody,'timeline-tie')
+        && strpos($timelineBody,'timeline-tie')<strpos($timelineBody,'timeline-late')
+        && str_contains($timelineBody,'2026-01-01 12:00:00'),'timeline ordered by actual timestamp then history id');
     check($http('student/request-detail.php?id='.$id,['action'=>'confirm','csrf_token'=>'bad'])[0]===403,'CSRF rejected');
     $confirmToken=$token($body);
     check($http('student/request-detail.php?id='.$id,['action'=>'confirm','csrf_token'=>$confirmToken])[0]===302,'HTTP confirmation succeeds');
