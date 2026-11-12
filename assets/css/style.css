@@ -84,3 +84,28 @@ body {
         flex-wrap: wrap;
     }
 }
+
+.card[href]:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, .10);
+}
+
+form input,
+form select,
+form textarea {
+    max-width: 100%;
+}
+
+form select {
+    padding: 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+}
+
+form button[type="submit"] {
+    background: #1e40af;
+    border: none;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+}

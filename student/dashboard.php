@@ -40,12 +40,11 @@ $categories = $stmt->fetchAll();
         ยินดีต้อนรับ <?= e($user['username']) ?>
     </p>
 
-    <div class="cards">
-        <div class="card">
+        <a class="card" href="create-request.php">
             <h3>แจ้งซ่อม</h3>
             <p>สร้างรายการแจ้งซ่อมใหม่</p>
-            <small>เตรียมพัฒนา</small>
-        </div>
+            <strong>เริ่มแจ้งซ่อม</strong>
+        </a>
 
         <div class="card">
             <h3>รายการแจ้งซ่อมของฉัน</h3>
